@@ -21,16 +21,20 @@ if any(tasksInfo(:,2) < tasksInfo(:,1))
 end
 
 % sorting by d - l
-preparedTasks = [(1:size(tasksInfo, 1))' tasksInfo (tasksInfo(:, 2) - tasksInfo(:, 1))];    
+preparedTasks = [ (1:size(tasksInfo, 1))' tasksInfo (tasksInfo(:, 2) - tasksInfo(:, 1)) ];    
 preparedTasks = sortrows(preparedTasks, 4);
 
 if size(processorsInfo, 2) == 1
     % Same performances processors
-    initSchedule = initialSchedule(preparedTasks, processorsInfo(1));
-    if ~isempty(initSchedule)
-        % a_1_1, a_1_2, ...
-        
+    [ indicator, m, n, initSchedule, lastTaskIndex ] ...
+        = initialSchedule(preparedTasks, processorsInfo(1));
+    if lastTaskIndex == n
+        disp('peremoga');
+        return;
     end
+    % a_1_1, a_1_2, ...
+    %disp(initSchedule);
+    schedule = a1_1(preparedTasks, m, n, initSchedule, lastTaskIndex + 1);
     % Approximation
     return;
 end
